@@ -7,7 +7,7 @@ public class RoomBehaviour : MonoBehaviour
     public GameObject[] walls;
     public GameObject[] doors;
 
-    // Never Eat Soggy Waffles
+    // Never  Eat   Soggy  Waffles
     // North, East, South, West
     // 0      1     2      3
 

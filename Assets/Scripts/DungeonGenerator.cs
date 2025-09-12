@@ -28,24 +28,22 @@ public class DungeonGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            RazeDungeon();
+            // Deletes the existing list + gameObjects
+            // Generates a new dungeon
+            board.Clear(); 
+            for (int i = (transform.childCount - 1); i >= 0; i--)
+            {
+                Transform child = transform.GetChild(i);
+                Destroy(child.gameObject);
+            }
             MazeGenerator();
-        }
-    }
-
-    void RazeDungeon()
-    {
-        board.Clear();
-
-        for (int i = (transform.childCount - 1); i >= 0; i--)
-        {
-            Transform child = transform.GetChild(i);
-            Destroy(child.gameObject);
         }
     }
 
     void GenerateDungeon()
     {
+        // After MazeGenerator(), new dungeon list is brought in
+        // and used to make the actual environment/gameObjects
         for (int i = 0; i < size.x; i++)
         {
             for (int j = 0; j < size.y; j++)
@@ -60,13 +58,13 @@ public class DungeonGenerator : MonoBehaviour
                     newRoom.name += " " + i + "-" + j;
                 }
             }
-            
+
         }
     }
 
     void MazeGenerator()
     {
-
+        // Generating the workable area
         board = new List<Cell>();
         for (int i = 0; i < (size.x * size.y); i++)
         {
@@ -77,17 +75,17 @@ public class DungeonGenerator : MonoBehaviour
         {
 
             int currentCell = startPos;
-
             Stack<int> path = new Stack<int>();
-
             int k = 0;
 
             while (k < 1000)
             {
                 k++;
 
+                // Marking current cell, checking adjacent cells if
+                // they've already been visited
+                // This type of check means no 3 or 4 way junctions
                 board[currentCell].visited = true;
-
                 List<int> neighbors = CheckNeighbors(currentCell);
 
                 if (currentCell == board.Count - 1)
@@ -110,9 +108,10 @@ public class DungeonGenerator : MonoBehaviour
                 else
                 {
                     path.Push(currentCell);
-
                     int newCell = neighbors[Random.Range(0, neighbors.Count)];
 
+                    // This amalgamation marks which doors and walls
+                    // end up being toggled
                     if (newCell > currentCell)
                     {
                         if (newCell - 1 == currentCell)
