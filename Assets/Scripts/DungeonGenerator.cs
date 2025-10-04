@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
@@ -16,10 +17,13 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject room;
 
     List<Cell> board;
+    string currentSceneName;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        currentSceneName = SceneManager.GetActiveScene().name;
         MazeGenerator();
     }
 
@@ -30,11 +34,12 @@ public class DungeonGenerator : MonoBehaviour
         {
             // Deletes the existing list + gameObjects
             // Generates a new dungeon
-            board.Clear(); 
+            board.Clear();
             for (int i = (transform.childCount - 1); i >= 0; i--)
             {
                 Transform child = transform.GetChild(i);
                 Destroy(child.gameObject);
+                SceneManager.LoadScene(currentSceneName);
             }
             MazeGenerator();
         }
@@ -177,7 +182,6 @@ public class DungeonGenerator : MonoBehaviour
             neighbors.Add(Mathf.FloorToInt(cell - 1));
 
         }
-
         return neighbors;
     }
 }
